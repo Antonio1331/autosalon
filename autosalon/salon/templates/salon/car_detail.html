@@ -1,0 +1,8 @@
+{% extends 'salon/base.html' %}
+{% block content %}
+<h2>{{ car.name }}</h2>
+<p><b>Brand:</b> {{ car.brand.name }}</p>
+<p><b>Year:</b> {{ car.year }}</p>
+<p><b>Price:</b> ${{ car.price }}</p>
+<a href="{% url 'car_list' %}" class="btn btn-secondary">Back</a>
+{% endblock %}
