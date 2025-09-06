@@ -1,0 +1,13 @@
+{% extends 'salon/base.html' %}
+
+{% block content %}
+  <h2>Avtomobilni o‘chirish</h2>
+
+  <p>Siz <b>{{ car.name }}</b> ({{ car.brand.name }}, {{ car.year }}) avtomobilini o‘chirishni xohlaysizmi?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Ha, o‘chirish</button>
+    <a href="{% url 'car_list' %}" class="btn btn-secondary">Bekor qilish</a>
+  </form>
+{% endblock %}
