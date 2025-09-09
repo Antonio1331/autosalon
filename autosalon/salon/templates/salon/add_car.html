@@ -1,12 +1,18 @@
-{% extends 'salon/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<div class="card shadow p-4">
-  <h2>Yangi mashina qo‘shish</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Saqlash</button>
-    <a href="{% url 'car_list' %}" class="btn btn-secondary">Bekor qilish</a>
-  </form>
-</div>
+    <h2 class="mb-4">Yangi avtomobil qo'shish</h2>
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data" class="w-50">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Saqlash</button>
+        <a href="{% url 'car_list' %}" class="btn btn-secondary">Orqaga</a>
+    </form>
 {% endblock %}

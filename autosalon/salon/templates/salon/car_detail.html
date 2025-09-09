@@ -1,44 +1,37 @@
-{% extends 'salon/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
+    <h2 class="mb-4">{{ car.brand.name }} {{ car.name }}</h2>
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <p><strong>Yil:</strong> {{ car.year }}</p>
+    <p><strong>Narx:</strong> {{ car.price }} $</p>
+    <p><strong>Sotuvda:</strong> {% if car.is_available %}Ha{% else %}Yo'q{% endif %}</p>
+    {% if car.image %}
+        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="img-fluid" style="max-width: 300px;">
+    {% endif %}
 
-<div class="card shadow p-3 mb-4">
-  <h2>{{ car.brand.name }} - {{ car.name }}</h2>
-  <p><b>Yil:</b> {{ car.year }}</p>
-  <p><b>Narx:</b> ${{ car.price }}</p>
-  {% if car.image %}
-    <img src="{{ car.image.url }}" alt="{{ car.name }}" class="img-fluid rounded" style="max-width:300px;">
-  {% endif %}
-<div class="text-center mt-3">
-    <a href="{% url 'delete_car' car.pk %}" class="btn btn-danger btn-lg px-5 py-2" style="font-size: 17px;">
-        O‘chirish
-    </a>
-</div>
+    <h3 class="mt-4">Izohlar</h3>
+    <ul class="list-group">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <strong>{{ comment.author }}</strong> ({{ comment.created_at }}): {{ comment.text }}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Izohlar mavjud emas.</li>
+        {% endfor %}
+    </ul>
 
-
-
-</div>
-
-<div class="card shadow p-3 mb-4">
-  <h3>Izohlar</h3>
-  <ul class="list-group mb-3">
-    {% for comment in comments %}
-      <li class="list-group-item">
-        <b>{{ comment.author }}</b>: {{ comment.text }}
-      </li>
-    {% empty %}
-      <li class="list-group-item">Hali izohlar yo‘q.</li>
-    {% endfor %}
-  </ul>
-
-  <h4>Izoh qoldirish</h4>
-  <form method="post" class="mt-3">
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit" class="btn btn-primary">Qo‘shish</button>
-  </form>
-</div>
-
-<a href="{% url 'car_list' %}" class="btn btn-secondary">Orqaga</a>
-
-
+    <h3 class="mt-4">Yangi izoh qoldirish</h3>
+    <form method="post" class="w-50">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-success">Izoh qo'shish</button>
+    </form>
+    <a href="{% url 'car_list' %}" class="btn btn-secondary mt-3">Orqaga</a>
 {% endblock %}

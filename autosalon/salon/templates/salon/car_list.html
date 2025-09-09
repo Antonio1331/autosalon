@@ -1,20 +1,30 @@
-{% extends 'salon/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<h2>All Cars</h2>
-<div class="row">
-    {% for car in cars %}
-    <div class="col-md-4">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5>{{ car.name }}</h5>
-                <p>Brand: {{ car.brand.name }}</p>
-                <p>Year: {{ car.year }}</p>
-                <p>Price: ${{ car.price }}</p>
-                <a href="{% url 'car_detail' car.pk %}" class="btn btn-info">Details</a>
-            </div>
+    <h2 class="mb-4">Avtomobillar ro'yxati</h2>
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
-    {% endfor %}
-</div>
+    {% endif %}
+    <ul class="list-group">
+        {% for car in cars %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'car_detail' car.pk %}">{{ car.brand.name }} {{ car.name }} ({{ car.year }}) - {{ car.price }} $</a>
+                    {% if car.image %}
+                        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="img-thumbnail" style="max-width: 100px;">
+                    {% endif %}
+                </div>
+                <div>
+                    <a href="{% url 'update_car' car.pk %}" class="btn btn-sm btn-primary">Tahrirlash</a>
+                    <a href="{% url 'delete_car' car.pk %}" class="btn btn-sm btn-danger">O'chirish</a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Avtomobillar mavjud emas.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
->

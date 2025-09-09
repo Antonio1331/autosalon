@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2 class="mb-4">{{ car.brand.name }} {{ car.name }} o'chirish</h2>
+    <h2 class="mb-4">{{ car.brand.name }} {{ car.name }} tahrirlash</h2>
     {% if messages %}
         <div class="alert alert-dismissible fade show" role="alert">
             {% for message in messages %}
@@ -9,10 +9,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
-    <form method="post" class="w-50">
+    <form method="post" enctype="multipart/form-data" class="w-50">
         {% csrf_token %}
-        <p>Haqiqatan ham ushbu avtomobilni o'chirmoqchimisiz?</p>
-        <button type="submit" class="btn btn-danger">O'chirish</button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Saqlash</button>
         <a href="{% url 'car_list' %}" class="btn btn-secondary">Orqaga</a>
     </form>
 {% endblock %}

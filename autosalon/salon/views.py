@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from .models import Brand, Car, Comment
 from .forms import CarForm, CommentForm
-
 
 def brand_list(request):
     brands = Brand.objects.all()
@@ -14,17 +14,16 @@ def car_list(request):
 def car_detail(request, pk):
     car = get_object_or_404(Car, pk=pk)
     comments = car.comments.all()
-
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
+        if comment_form.is_valid():  # form → comment_form
             new_comment = comment_form.save(commit=False)
             new_comment.car = car
             new_comment.save()
+            messages.success(request, "Izoh muvaffaqiyatli qo'shildi!")
             return redirect('car_detail', pk=car.pk)
     else:
         comment_form = CommentForm()
-
     return render(request, "salon/car_detail.html", {
         "car": car,
         "comments": comments,
@@ -41,26 +40,28 @@ def add_car(request):
         form = CarForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, "Avtomobil muvaffaqiyatli qo'shildi!")
             return redirect('car_list')
     else:
         form = CarForm()
     return render(request, "salon/add_car.html", {"form": form})
 
+def update_car(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES, instance=car)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Avtomobil muvaffaqiyatli yangilandi!")
+            return redirect('car_list')
+    else:
+        form = CarForm(instance=car)
+    return render(request, "salon/update_car.html", {"form": form, "car": car})
 
 def delete_car(request, pk):
     car = get_object_or_404(Car, pk=pk)
-    if request.method == "POST":
+    if request.method == 'POST':
         car.delete()
+        messages.success(request, "Avtomobil muvaffaqiyatli o'chirildi!")
         return redirect('car_list')
     return render(request, 'salon/delete_car.html', {'car': car})
-
-def add_car(request):
-    if request.method == "POST":
-        form = CarForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("car_list")
-    else:
-        form = CarForm()
-    return render(request, "salon/add_car.html", {"form": form})
-

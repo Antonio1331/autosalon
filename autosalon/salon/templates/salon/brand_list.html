@@ -1,11 +1,21 @@
-{% extends 'salon/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<h2>All Brands</h2>
-<ul class="list-group">
-    {% for brand in brands %}
-        <li class="list-group-item">
-            <a href="{% url 'brand_cars' brand.pk %}">{{ brand.name }} ({{ brand.country }})</a>
-        </li>
-    {% endfor %}
-</ul>
+    <h2 class="mb-4">Brendlar ro'yxati</h2>
+    {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <ul class="list-group">
+        {% for brand in brands %}
+            <li class="list-group-item">
+                <a href="{% url 'brand_cars' brand.pk %}">{{ brand.name }} ({{ brand.country }})</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Brendlar mavjud emas.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
